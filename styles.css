@@ -313,33 +313,27 @@ p {
   right: 0.6rem;
 }
 
+.partners-viewport {
+  overflow: hidden;
+  border-radius: 24px;
+}
+
 .partners-carousel {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(250px, 270px);
+  width: 100%;
+  overflow: hidden;
+}
+
+.partners-track {
+  display: flex;
   gap: 1rem;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  -webkit-overflow-scrolling: touch;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
   padding: 0 3.4rem 0.4rem;
-  scrollbar-width: none;
-}
-
-.partners-carousel::-webkit-scrollbar {
-  display: none;
-}
-
-.partners-carousel.is-draggable {
-  cursor: grab;
-}
-
-.partners-carousel.is-draggable.is-dragging {
-  cursor: grabbing;
-  scroll-snap-type: none;
+  touch-action: pan-y;
 }
 
 .partner-card {
-  scroll-snap-align: start;
+  flex: 0 0 clamp(245px, 28vw, 270px);
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 20px;
@@ -782,13 +776,8 @@ body.nav-open::before {
     width: 100%;
   }
 
-  .partners-carousel {
-    grid-auto-columns: 82vw;
+  .partners-track {
     padding: 0 2.9rem 0.35rem;
-  }
-
-  .partners-shell {
-    min-height: 1px;
   }
 
   .partners-arrow {
@@ -802,6 +791,10 @@ body.nav-open::before {
 
   .partners-next {
     right: 0.35rem;
+  }
+
+  .partner-card {
+    flex-basis: 82vw;
   }
 
   .section {

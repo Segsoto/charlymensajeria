@@ -110,82 +110,139 @@ if (yearNode) {
 const partnersCarousel = document.querySelector('.partners-carousel');
 
 if (partnersCarousel && !partnersCarousel.dataset.loopReady) {
-  const sourceCards = Array.from(partnersCarousel.querySelectorAll('.partner-card'));
+  const track = partnersCarousel.querySelector('.partners-track');
+  const sourceCards = track ? Array.from(track.querySelectorAll('.partner-card')) : [];
   const partnersSection = partnersCarousel.closest('.partners-shell');
   const prevButton = partnersSection?.querySelector('.partners-prev');
   const nextButton = partnersSection?.querySelector('.partners-next');
 
-  if (sourceCards.length > 1) {
-    sourceCards.forEach((card) => {
-      const clone = card.cloneNode(true);
-      clone.setAttribute('aria-hidden', 'true');
-      partnersCarousel.appendChild(clone);
-    });
+  if (track && sourceCards.length > 1) {
+    for (let copyIndex = 0; copyIndex < 2; copyIndex += 1) {
+      sourceCards.forEach((card) => {
+        const clone = card.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        track.appendChild(clone);
+      });
+    }
 
     partnersCarousel.dataset.loopReady = 'true';
 
-    let animationFrameId = null;
-    let pauseUntil = 0;
+    const state = {
+      offset: 0,
+      width: 0,
+      pausedUntil: 0,
+      autoFrame: null,
+      animationFrame: null,
+      lastTime: 0,
+      isAnimating: false,
+    };
 
-    const normalizeScroll = () => {
-      const halfWidth = partnersCarousel.scrollWidth / 2;
-      if (partnersCarousel.scrollLeft >= halfWidth) {
-        partnersCarousel.scrollLeft -= halfWidth;
-      } else if (partnersCarousel.scrollLeft <= 0) {
-        partnersCarousel.scrollLeft += halfWidth;
+    const easing = (value) => (value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2);
+
+    const measureWidth = () => {
+      state.width = track.scrollWidth / 3;
+      state.offset = state.width + (((state.offset - state.width) % state.width) + state.width) % state.width;
+    };
+
+    const render = () => {
+      track.style.transform = `translate3d(${-state.offset}px, 0, 0)`;
+    };
+
+    const normalize = () => {
+      if (!state.width) {
+        return;
       }
-    };
 
-    const getLoopWidth = () => partnersCarousel.scrollWidth / 2;
-
-    const setWrappedScrollLeft = (targetLeft) => {
-      const loopWidth = getLoopWidth();
-      const wrappedLeft = ((targetLeft % loopWidth) + loopWidth) % loopWidth;
-      partnersCarousel.scrollLeft = wrappedLeft;
-    };
-
-    const autoScroll = () => {
-      if (Date.now() >= pauseUntil) {
-        partnersCarousel.scrollLeft += 0.5;
-        normalizeScroll();
+      while (state.offset >= state.width * 2) {
+        state.offset -= state.width;
       }
 
-      animationFrameId = requestAnimationFrame(autoScroll);
+      while (state.offset < state.width) {
+        state.offset += state.width;
+      }
+
+      render();
     };
 
-    const getStepSize = () => {
-      const firstCard = partnersCarousel.querySelector('.partner-card');
-      if (!firstCard) {
+    const animateTo = (targetOffset) => {
+      if (state.animationFrame) {
+        cancelAnimationFrame(state.animationFrame);
+      }
+
+      state.isAnimating = true;
+      const startOffset = state.offset;
+      const distance = targetOffset - startOffset;
+      const duration = 520;
+      const startTime = performance.now();
+
+      const frame = (time) => {
+        const progress = Math.min((time - startTime) / duration, 1);
+        state.offset = startOffset + distance * easing(progress);
+        render();
+
+        if (progress < 1) {
+          state.animationFrame = requestAnimationFrame(frame);
+          return;
+        }
+
+        state.isAnimating = false;
+        normalize();
+        state.animationFrame = null;
+      };
+
+      state.animationFrame = requestAnimationFrame(frame);
+    };
+
+    const stepWidth = () => {
+      const card = track.querySelector('.partner-card');
+      if (!card) {
         return 300;
       }
-      const gap = Number.parseFloat(getComputedStyle(partnersCarousel).columnGap || '16');
-      return firstCard.getBoundingClientRect().width + gap;
+
+      const gap = Number.parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || '16');
+      return card.getBoundingClientRect().width + gap;
     };
 
-    const moveByStep = (direction) => {
-      pauseUntil = Date.now() + 1600;
-      const step = getStepSize() * direction;
-      setWrappedScrollLeft(partnersCarousel.scrollLeft + step);
+    const move = (direction) => {
+      state.pausedUntil = performance.now() + 900;
+      animateTo(state.offset + stepWidth() * direction);
     };
 
-    partnersCarousel.addEventListener('scroll', normalizeScroll, { passive: true });
-    partnersCarousel.addEventListener('resize', normalizeScroll);
-    partnersCarousel.addEventListener('pointerdown', () => {
-      pauseUntil = Date.now() + 1600;
-    });
-    partnersCarousel.addEventListener('wheel', () => {
-      pauseUntil = Date.now() + 1600;
-    }, { passive: true });
+    const autoLoop = (time) => {
+      if (!state.lastTime) {
+        state.lastTime = time;
+      }
+
+      const deltaTime = time - state.lastTime;
+      state.lastTime = time;
+
+      if (time >= state.pausedUntil && !state.isAnimating) {
+        state.offset += (deltaTime * 0.03);
+        normalize();
+      }
+
+      state.autoFrame = requestAnimationFrame(autoLoop);
+    };
 
     if (prevButton && nextButton) {
-      prevButton.addEventListener('click', () => moveByStep(-1));
-      nextButton.addEventListener('click', () => moveByStep(1));
+      prevButton.addEventListener('click', () => move(-1));
+      nextButton.addEventListener('click', () => move(1));
     }
 
-    window.addEventListener('resize', () => {
-      normalizeScroll();
+    partnersCarousel.addEventListener('pointerdown', () => {
+      state.pausedUntil = performance.now() + 1200;
     });
 
-    animationFrameId = requestAnimationFrame(autoScroll);
+    window.addEventListener('resize', () => {
+      measureWidth();
+      normalize();
+    });
+
+    requestAnimationFrame(() => {
+      measureWidth();
+      state.offset = state.width;
+      render();
+      state.autoFrame = requestAnimationFrame(autoLoop);
+    });
   }
 }
