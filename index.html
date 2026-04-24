@@ -63,7 +63,14 @@
           <span>Charly Mensajeria</span>
         </a>
 
-        <button class="menu-toggle" aria-expanded="false" aria-controls="main-nav">Menu</button>
+        <button class="menu-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menu">
+          <span class="menu-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span class="sr-only">Abrir menu</span>
+        </button>
 
         <nav class="main-nav" id="main-nav" aria-label="Navegacion principal">
           <a class="is-active" href="index.html">Inicio</a>
@@ -101,6 +108,66 @@
           <figure class="hero-media section-reveal">
             <img src="assets/images/hero-courier.svg" alt="Equipo de mensajeria corporativa en operacion" />
           </figure>
+        </div>
+      </section>
+
+      <section class="section partners-section">
+        <div class="container">
+          <div class="section-head section-reveal">
+            <p class="eyebrow">Empresas con las que trabajamos</p>
+            <h2>Un espacio para mostrar clientes y aliados estratégicos</h2>
+            <p class="partners-lead">
+              De momento usamos ejemplos visuales para que luego puedas reemplazarlos por marcas reales.
+            </p>
+          </div>
+
+          <div class="partners-shell section-reveal">
+            <button class="partners-arrow partners-prev" type="button" aria-label="Empresa anterior">
+              &#10094;
+            </button>
+
+            <div class="partners-carousel" aria-label="Empresas con las que trabajamos">
+              <article class="partner-card">
+                <div class="partner-media partner-media-a">
+                  <div class="partner-badge">Logo</div>
+                  <span>Imagen de la empresa</span>
+                </div>
+                <h3>Empresa Ejemplo 1</h3>
+                <p>Servicios legales y gestion documental para operaciones sensibles.</p>
+              </article>
+
+              <article class="partner-card">
+                <div class="partner-media partner-media-b">
+                  <div class="partner-badge">Logo</div>
+                  <span>Imagen de la empresa</span>
+                </div>
+                <h3>Empresa Ejemplo 2</h3>
+                <p>Aliado corporativo para tramites financieros y recolecciones urgentes.</p>
+              </article>
+
+              <article class="partner-card">
+                <div class="partner-media partner-media-c">
+                  <div class="partner-badge">Logo</div>
+                  <span>Imagen de la empresa</span>
+                </div>
+                <h3>Empresa Ejemplo 3</h3>
+                <p>Soporte de mensajeria para departamentos administrativos y compras.</p>
+              </article>
+
+              <article class="partner-card">
+                <div class="partner-media partner-media-d">
+                  <div class="partner-badge">Logo</div>
+                  <span>Imagen de la empresa</span>
+                </div>
+                <h3>Empresa Ejemplo 4</h3>
+                <p>Cobertura operativa para equipos que requieren puntualidad constante.</p>
+              </article>
+            </div>
+
+            <button class="partners-arrow partners-next" type="button" aria-label="Siguiente empresa">
+              &#10095;
+            </button>
+          </div>
         </div>
       </section>
 
