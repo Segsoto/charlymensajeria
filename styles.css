@@ -652,7 +652,7 @@ p {
   align-items: center;
   justify-content: center;
   border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 10px 26px rgba(31, 184, 91, 0.32);
+  box-shadow: none;
 }
 
 .whatsapp-float::before {
@@ -784,7 +784,7 @@ body.nav-open::before {
     width: 4.05rem;
     height: 4.05rem;
     border: 2px solid #ffffff;
-    box-shadow: 0 16px 34px rgba(31, 184, 91, 0.48);
+    box-shadow: none;
   }
 
   .whatsapp-float::before {
