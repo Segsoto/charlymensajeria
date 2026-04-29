@@ -26,6 +26,7 @@ const counterObserver = new IntersectionObserver(
 
       const counter = entry.target;
       const target = Number(counter.dataset.counter);
+      const suffix = counter.textContent.includes('%') ? '%' : '';
       const duration = 1000;
       const start = performance.now();
 
@@ -33,7 +34,7 @@ const counterObserver = new IntersectionObserver(
         const progress = Math.min((time - start) / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 3);
         const value = Math.floor(target * eased);
-        counter.textContent = `${value}`;
+        counter.textContent = `${value}${suffix}`;
 
         if (progress < 1) {
           requestAnimationFrame(updateCounter);
