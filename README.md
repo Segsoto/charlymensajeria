@@ -37,7 +37,7 @@ La comprobación valida estructura, idioma, metadatos, IDs, enlaces, anclas y re
 
 ## Publicación
 
-Para Hostinger en Windows, ejecute `npm run hostinger`. Se generan `HOSTINGER/public_html/`, un ZIP listo para extraer dentro de `public_html` y una guía `HOSTINGER/LEEME.md`. Esa es la carpeta de publicación; no se debe subir la raíz del proyecto. Consulte [la guía de Hostinger](docs/hostinger.md).
+Para Hostinger en Windows, haga doble clic en `Preparar Hostinger.cmd` o ejecute `npm run hostinger`. Se generan `HOSTINGER/public_html/`, un ZIP listo para extraer dentro de `public_html` y una guía `HOSTINGER/LEEME.md`. Esa es la carpeta de publicación; no se debe subir la raíz del proyecto. Consulte [la guía de Hostinger](docs/hostinger.md).
 
 `npm run build` prepara `public/` con las cuatro páginas, CSS y JavaScript con nombres versionados, imágenes, SVG y `.htaccess`. Los archivos de la raíz se conservan para la vista previa local. No se necesita un servidor de React.
 

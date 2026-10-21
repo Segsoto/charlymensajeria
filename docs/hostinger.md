@@ -2,7 +2,7 @@
 
 ## Subida manual
 
-Ejecute `npm run hostinger` en la carpeta del proyecto. Se generan:
+Haga doble clic en `Preparar Hostinger.cmd`, o ejecute `npm run hostinger` en la carpeta del proyecto. Se generan:
 
 - `HOSTINGER/public_html/`: solo archivos que necesita el sitio.
 - `HOSTINGER/charlie-public_html.zip`: el mismo contenido, con `.htaccess` incluido.
