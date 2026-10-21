@@ -37,9 +37,11 @@ La comprobación valida estructura, idioma, metadatos, IDs, enlaces, anclas y re
 
 ## Publicación
 
-Publique `index.html`, `quienes-somos.html`, `como-operamos.html`, `contactenos.html`, `styles.css`, `script.js`, `images/` y `assets/`. No se necesita un servidor de React, ni publicar `node_modules/`, `.build/`, `src/`, `scripts/`, `docs/` u `output/`.
+`npm run build` prepara `public/` con las cuatro páginas, el cliente compilado, estilos, imágenes y los SVG utilizados. Publique el contenido de esa carpeta. Los archivos de la raíz se conservan para la vista previa local. No se necesita un servidor de React.
 
-Se conservan las URLs canónicas publicadas y el ancla `index.html#como-operamos`. Si el hosting sirve rutas limpias (`/quienes-somos`, `/como-operamos`, `/contactenos`), debe mantener sus redirecciones o reglas existentes hacia los HTML correspondientes.
+Vercel toma la configuración de `vercel.json`: comando `npm run build`, salida `public` y rutas limpias (`/quienes-somos`, `/como-operamos`, `/contactenos`). Los enlaces a `.html` redirigen a esas rutas y conservan sus consultas y anclas. En otros hostings, configure reglas equivalentes para las URLs canónicas.
+
+Valide los recursos de la carpeta que se desplegará con `node scripts/check.mjs public` después del build. `public/` se genera durante cada despliegue y no se incluye en Git.
 
 ## Diseño y recorrido
 

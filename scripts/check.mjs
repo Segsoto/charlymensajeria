@@ -3,7 +3,7 @@ import { readFile, stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = fileURLToPath(new URL('../', import.meta.url));
+const root = resolve(fileURLToPath(new URL('../', import.meta.url)), process.argv[2] || '.');
 const pages = ['index.html', 'quienes-somos.html', 'como-operamos.html', 'contactenos.html'];
 const htmlByFile = new Map(await Promise.all(pages.map(async file => [file, await readFile(resolve(root, file), 'utf8')])));
 for (const [file, html] of htmlByFile) {
