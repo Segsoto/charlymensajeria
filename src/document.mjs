@@ -1,6 +1,6 @@
 import { site, publishedSEO } from './site.mjs';
 
-export function document(file, markup) {
+export function document(file, markup, assets = { stylesheet: 'styles.css', script: 'script.js' }) {
   const seo = publishedSEO[file];
   const canonical = `${site.url}${seo.canonicalPath}`;
   return `<!DOCTYPE html>
@@ -20,7 +20,7 @@ ${seo.keywords ? `  <meta name="keywords" content="${seo.keywords}">` : ''}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="${assets.stylesheet}">
   <noscript><style>@media(max-width:960px){.site-header{position:relative;background:#202a30}.page-hero{padding-top:50px}.hero-content{padding-top:60px}}</style></noscript>
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_CR">
@@ -31,7 +31,7 @@ ${seo.keywords ? `  <meta name="keywords" content="${seo.keywords}">` : ''}
   <meta property="og:image" content="${site.url}/images/courier-hero.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'LocalBusiness', name: site.name, url: site.url, telephone: site.phoneHref, email: site.email, logo: `${site.url}/images/logoPrincipal.png`, areaServed: 'Costa Rica', description: 'Mensajería empresarial, documentación y trámites corporativos en Costa Rica.' })}</script>
-  <script type="module" src="script.js"></script>
+  <script type="module" src="${assets.script}"></script>
 </head>
 <body><div id="root" data-page="${file}">${markup}</div></body>
 </html>`;

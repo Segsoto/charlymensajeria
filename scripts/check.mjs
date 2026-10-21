@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import { readFile, stat } from 'node:fs/promises';
+import { readFile, readdir, stat } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -22,5 +23,21 @@ for (const [file, html] of htmlByFile) {
     if (/\.(?:png|gif|jpeg|jpg|svg|js|css)$/.test(local)) await readFile(resolve(root, local));
   }
   console.log(`OK ${file}: estructura, metadatos, enlaces y recursos legibles`);
+}
+if (process.argv[2]) {
+  const release = JSON.parse(await readFile(resolve(root, 'release.json'), 'utf8'));
+  for (const asset of Object.values(release.assets)) {
+    const data = await readFile(resolve(root, asset));
+    const hash = createHash('sha256').update(data).digest('hex').slice(0, 12);
+    assert.ok(asset.includes(`.${hash}.`), `${asset}: versión acorde al contenido`);
+    for (const [file, html] of htmlByFile) assert.ok(html.includes(`"${asset}"`), `${file}: recurso de la misma versión`);
+  }
+  const allowed = new Set([...pages, ...Object.values(release.assets), 'images', 'assets', '.htaccess', 'release.json']);
+  for (const entry of await readdir(root)) assert.ok(allowed.has(entry), `Archivo ajeno a la publicación: ${entry}`);
+  for (const match of (await readFile(resolve(root, release.assets.stylesheet), 'utf8')).matchAll(/url\(['"]?([^)'"\s]+)['"]?\)/g)) {
+    if (!/^(https?:|data:|#)/.test(match[1])) await readFile(resolve(root, match[1]));
+  }
+  assert.match(await readFile(resolve(root, '.htaccess'), 'utf8'), /DirectoryIndex index\.html/);
+  console.log('OK paquete de publicación: versiones de recursos, imágenes CSS y archivos permitidos');
 }
 console.log('Comprobación estática completada.');

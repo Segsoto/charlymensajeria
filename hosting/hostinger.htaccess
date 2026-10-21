@@ -1,0 +1,33 @@
+Options -Indexes -MultiViews
+DirectoryIndex index.html
+AddDefaultCharset UTF-8
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Protect development files if the whole project is uploaded by mistake.
+  RewriteRule ^(?:\.git|\.github|\.build|\.codex|node_modules|src|scripts|docs|modules|public|output|HOSTINGER|hosting)(?:/|$) - [F,L,NC]
+  RewriteRule ^(?:package(?:-lock)?\.json|vercel\.json|README\.md)$ - [F,L,NC]
+
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+  RewriteRule ^ https://charliemensajeria.com%{REQUEST_URI} [R=301,L]
+
+  RewriteCond %{THE_REQUEST} \s/+index\.html[?\s] [NC]
+  RewriteRule ^index\.html$ / [R=301,L]
+  RewriteCond %{THE_REQUEST} \s/+(quienes-somos|como-operamos|contactenos)\.html[?\s] [NC]
+  RewriteRule ^(quienes-somos|como-operamos|contactenos)\.html$ /$1 [R=301,L]
+  RewriteRule ^(quienes-somos|como-operamos|contactenos)/?$ $1.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|json)$">
+    Header set Cache-Control "no-cache, max-age=0, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.[a-f0-9]{12}\.(css|js)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>

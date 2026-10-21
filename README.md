@@ -37,11 +37,15 @@ La comprobación valida estructura, idioma, metadatos, IDs, enlaces, anclas y re
 
 ## Publicación
 
-`npm run build` prepara `public/` con las cuatro páginas, el cliente compilado, estilos, imágenes y los SVG utilizados. Publique el contenido de esa carpeta. Los archivos de la raíz se conservan para la vista previa local. No se necesita un servidor de React.
+Para Hostinger en Windows, ejecute `npm run hostinger`. Se generan `HOSTINGER/public_html/`, un ZIP listo para extraer dentro de `public_html` y una guía `HOSTINGER/LEEME.md`. Esa es la carpeta de publicación; no se debe subir la raíz del proyecto. Consulte [la guía de Hostinger](docs/hostinger.md).
+
+`npm run build` prepara `public/` con las cuatro páginas, CSS y JavaScript con nombres versionados, imágenes, SVG y `.htaccess`. Los archivos de la raíz se conservan para la vista previa local. No se necesita un servidor de React.
+
+Cada push a `main` compila y valida la web en GitHub Actions y actualiza la rama `codex/hostinger` con los archivos publicados. El propietario del hosting debe conectar esa rama y activar el despliegue automático: Hostinger deshabilita esa opción en modo colaborador. Preparar la rama no activa por sí solo la sincronización del servidor.
 
 Vercel toma la configuración de `vercel.json`: comando `npm run build`, salida `public` y rutas limpias (`/quienes-somos`, `/como-operamos`, `/contactenos`). Los enlaces a `.html` redirigen a esas rutas y conservan sus consultas y anclas. En otros hostings, configure reglas equivalentes para las URLs canónicas.
 
-Valide los recursos de la carpeta que se desplegará con `node scripts/check.mjs public` después del build. `public/` se genera durante cada despliegue y no se incluye en Git.
+Valide los recursos de la carpeta que se desplegará con `node scripts/check.mjs public` después del build. `public/` y `HOSTINGER/` se generan y no se incluyen en la rama de fuentes.
 
 ## Diseño y recorrido
 
