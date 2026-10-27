@@ -8,10 +8,10 @@ export const site = {
 };
 
 export const navigation = [
-  { href: 'index.html', label: 'Inicio' },
-  { href: 'index.html#servicios', label: 'Servicios' },
-  { href: 'quienes-somos.html', label: 'Quiénes somos' },
-  { href: 'como-operamos.html', label: 'Cómo operamos' },
+  { href: '/', page: 'index.html', label: 'Inicio' },
+  { href: '/#servicios', label: 'Servicios' },
+  { href: '/quienes-somos', page: 'quienes-somos.html', label: 'Quiénes somos' },
+  { href: '/como-operamos', page: 'como-operamos.html', label: 'Cómo operamos' },
 ];
 
 export const services = [

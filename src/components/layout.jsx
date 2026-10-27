@@ -19,13 +19,13 @@ export function Icon({ name, className = '' }) {
   return <svg className={`icon ${className}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name] || paths.document}</svg>;
 }
 
-export function Action({ href = 'contactenos.html', children = 'Solicitar cotización', className = '' }) {
+export function Action({ href = '/contactenos', children = 'Solicitar cotización', className = '' }) {
   return <a className={`button ${className}`} href={href}>{children}<Icon name="arrow"/></a>;
 }
 
 export function Brand() {
   const filterId = useId();
-  return <a className="brand" href="index.html" aria-label="Charlie Mensajería · Inicio"><span className="brand-crop"><svg className="brand-logo" viewBox="76 270 1165 257" aria-hidden="true">
+  return <a className="brand" href="/" aria-label="Charlie Mensajería · Inicio"><span className="brand-crop"><svg className="brand-logo" viewBox="76 270 1165 257" aria-hidden="true">
     <defs><filter id={filterId} colorInterpolationFilters="sRGB">
       {/* Remove the light matte and adapt the original artwork for dark surfaces. */}
       <feColorMatrix type="matrix" values="0 0 0 0 1  -.6 0 0 0 1.05  -1.5 0 0 0 1.15  0 0 -8 0 6.2"/>
@@ -70,9 +70,9 @@ export function Header({ page }) {
       {open ? <button className="menu-backdrop" type="button" aria-label="Cerrar menú de navegación" tabIndex="-1" onClick={() => { setOpen(false); toggle.current?.focus(); }}/> : null}
       <nav id="main-nav" className={`main-nav${open ? ' is-open' : ''}`} aria-label="Navegación principal" onClick={event => { if (event.target.closest('a')) setOpen(false); }}>
         <div className="mobile-nav-intro"><span className="eyebrow">Charlie Mensajería</span><p>Una ruta directa a lo que necesita.</p></div>
-        {navigation.map((item, index) => <a key={item.href} href={item.href} aria-current={page === item.href ? 'page' : undefined}><span className="nav-index" aria-hidden="true">0{index + 1}</span><span>{item.label}</span><Icon name="arrow" className="nav-arrow"/></a>)}
-        <a href="contactenos.html" aria-current={page === 'contactenos.html' ? 'page' : undefined}><span className="nav-index" aria-hidden="true">05</span><span>Contacto</span><Icon name="arrow" className="nav-arrow"/></a>
-        <div className="mobile-nav-contact"><a className="button" href="contactenos.html">Solicitar cotización<Icon name="arrow"/></a><a className="mobile-nav-phone" href={`tel:${site.phoneHref}`}><Icon name="phone"/>{site.phone}</a></div>
+        {navigation.map((item, index) => <a key={item.href} href={item.href} aria-current={page === item.page ? 'page' : undefined}><span className="nav-index" aria-hidden="true">0{index + 1}</span><span>{item.label}</span><Icon name="arrow" className="nav-arrow"/></a>)}
+        <a href="/contactenos" aria-current={page === 'contactenos.html' ? 'page' : undefined}><span className="nav-index" aria-hidden="true">05</span><span>Contacto</span><Icon name="arrow" className="nav-arrow"/></a>
+        <div className="mobile-nav-contact"><a className="button" href="/contactenos">Solicitar cotización<Icon name="arrow"/></a><a className="mobile-nav-phone" href={`tel:${site.phoneHref}`}><Icon name="phone"/>{site.phone}</a></div>
       </nav>
       <a className="header-phone" href={`tel:${site.phoneHref}`}><Icon name="phone"/><span>{site.phone}</span></a>
     </div>
@@ -87,7 +87,7 @@ export function SectionHeading({ eyebrow, title, description, id, left = false }
 }
 
 export function PageHero({ title, description, label }) {
-  return <section className="page-hero"><div className="container"><nav className="breadcrumbs" aria-label="Ruta de navegación"><a href="index.html">Inicio</a><span aria-hidden="true">/</span><span aria-current="page">{label}</span></nav><h1>{title}</h1><p>{description}</p></div></section>;
+  return <section className="page-hero"><div className="container"><nav className="breadcrumbs" aria-label="Ruta de navegación"><a href="/">Inicio</a><span aria-hidden="true">/</span><span aria-current="page">{label}</span></nav><h1>{title}</h1><p>{description}</p></div></section>;
 }
 
 export function ContactBanner() {
@@ -95,7 +95,7 @@ export function ContactBanner() {
 }
 
 export function Footer() {
-  return <footer className="site-footer"><div className="container footer-grid"><div className="footer-about"><Brand/><p>35 años conectando empresas con lo que importa. Mensajería y trámites empresariales en Costa Rica.</p><span className="footer-location">Costa Rica · Atención empresarial</span></div><nav aria-label="Navegación de pie de página"><h2>Explore</h2><a href="index.html">Inicio</a><a href="index.html#servicios">Servicios</a><a href="quienes-somos.html">Quiénes somos</a><a href="como-operamos.html">Cómo operamos</a></nav><div><h2>Conversemos</h2><a href={`tel:${site.phoneHref}`}><Icon name="phone"/>{site.phone}</a><a href={`mailto:${site.email}`}><Icon name="mail"/>{site.email}</a><a href={site.whatsapp} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp"/>Escribir por WhatsApp</a></div><div className="footer-proposal"><h2>Su empresa, en buenas manos.</h2><p>Cuéntenos qué necesita y definamos juntos la mejor ruta.</p><Action className="button-outline">Preparar solicitud</Action></div></div><div className="container footer-bottom"><p>© {new Date().getFullYear()} {site.name} Todos los derechos reservados.</p><a href="#top">Volver arriba ↑</a></div></footer>;
+  return <footer className="site-footer"><div className="container footer-grid"><div className="footer-about"><Brand/><p>35 años conectando empresas con lo que importa. Mensajería y trámites empresariales en Costa Rica.</p><span className="footer-location">Costa Rica · Atención empresarial</span></div><nav aria-label="Navegación de pie de página"><h2>Explore</h2><a href="/">Inicio</a><a href="/#servicios">Servicios</a><a href="/quienes-somos">Quiénes somos</a><a href="/como-operamos">Cómo operamos</a></nav><div><h2>Conversemos</h2><a href={`tel:${site.phoneHref}`}><Icon name="phone"/>{site.phone}</a><a href={`mailto:${site.email}`}><Icon name="mail"/>{site.email}</a><a href={site.whatsapp} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp"/>Escribir por WhatsApp</a></div><div className="footer-proposal"><h2>Su empresa, en buenas manos.</h2><p>Cuéntenos qué necesita y definamos juntos la mejor ruta.</p><Action className="button-outline">Preparar solicitud</Action></div></div><div className="container footer-bottom"><p>© {new Date().getFullYear()} {site.name} Todos los derechos reservados.</p><a href="#top">Volver arriba ↑</a></div></footer>;
 }
 
 export function WhatsAppLink() {

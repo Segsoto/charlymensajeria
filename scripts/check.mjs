@@ -3,10 +3,12 @@ import { readFile, readdir, stat } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { publishedSEO } from '../src/site.mjs';
 
 const root = resolve(fileURLToPath(new URL('../', import.meta.url)), process.argv[2] || '.');
 const pages = ['index.html', 'quienes-somos.html', 'como-operamos.html', 'contactenos.html'];
 const htmlByFile = new Map(await Promise.all(pages.map(async file => [file, await readFile(resolve(root, file), 'utf8')])));
+const routeFiles = new Map(Object.entries(publishedSEO).map(([file, seo]) => [seo.canonicalPath, file]));
 for (const [file, html] of htmlByFile) {
   assert.equal((html.match(/<h1\b/g) || []).length, 1, `${file}: un solo h1`);
   assert.match(html, /<html lang="es-CR"/, `${file}: idioma`);
@@ -16,11 +18,19 @@ for (const [file, html] of htmlByFile) {
   for (const match of html.matchAll(/\b(?:href|src)="([^"]+)"/g)) {
     const href = match[1];
     if (/^(?:https?:|mailto:|tel:)/.test(href)) continue;
-    const [target, hash] = href.split('#');
-    const local = target.split('?')[0] || file;
+    const url = new URL(href, `https://local.invalid${publishedSEO[file].canonicalPath}`);
+    const hash = url.hash.slice(1);
+    const local = routeFiles.get(url.pathname) || decodeURIComponent(url.pathname).replace(/^\//, '');
     await stat(resolve(root, local));
     if (hash && htmlByFile.has(local)) assert.ok(htmlByFile.get(local).includes(`id="${hash}"`), `${file}: ancla ${href}`);
     if (/\.(?:png|gif|jpeg|jpg|svg|js|css)$/.test(local)) await readFile(resolve(root, local));
+  }
+  for (const match of html.matchAll(/\b(?:href|action)="([^"]+)"/g)) {
+    const href = match[1];
+    if (/^(?:https?:|mailto:|tel:)/.test(href)) continue;
+    assert.ok(!/\.html(?:[?#]|$)/.test(href), `${file}: enlace antiguo ${href}`);
+    const destination = new URL(href, `https://local.invalid${publishedSEO[file].canonicalPath}`);
+    if (!href.startsWith('#') && routeFiles.has(destination.pathname)) assert.ok(href.startsWith('/'), `${file}: ruta interna absoluta ${href}`);
   }
   console.log(`OK ${file}: estructura, metadatos, enlaces y recursos legibles`);
 }

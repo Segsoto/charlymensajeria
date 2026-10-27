@@ -12,13 +12,13 @@ npm run build
 npm run dev
 ```
 
-Vista previa: http://127.0.0.1:4173. Después de editar componentes, ejecute `npm run build` y actualice el navegador. `npm run dev` sirve los archivos ya generados; no incorpora recarga automática.
+Vista previa: http://127.0.0.1:4173. Después de editar componentes, ejecute `npm run build` y actualice el navegador. `npm run dev` sirve la carpeta compilada `public/` con las mismas rutas limpias de producción; no incorpora recarga automática.
 
 ```sh
 npm run check
 ```
 
-La comprobación valida estructura, idioma, metadatos, IDs, enlaces, anclas y recursos, además de 93 requisitos de conservación del contenido original. Los HTML y el JavaScript compilado se incluyen para hosting estático.
+La comprobación valida estructura, idioma, metadatos, IDs, enlaces, anclas y recursos, además de 93 requisitos de conservación del contenido original. También prueba por HTTP la navegación desde las cuatro páginas y el regreso a Inicio. Los enlaces usan directamente `/`, `/quienes-somos`, `/como-operamos` y `/contactenos` para evitar documentos `.html` antiguos guardados en el navegador.
 
 ## Organización
 

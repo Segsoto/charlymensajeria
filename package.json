@@ -8,7 +8,7 @@
     "dev": "node scripts/serve.mjs",
     "hostinger": "npm run build && npm run check && node scripts/check.mjs public && powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-hostinger.ps1",
     "publish:hostinger": "node scripts/publish-hostinger.mjs",
-    "check": "node scripts/check.mjs && node scripts/check-content.mjs"
+    "check": "node scripts/check.mjs && node scripts/check-content.mjs && node scripts/check-navigation.mjs"
   },
   "engines": {
     "node": ">=20"
